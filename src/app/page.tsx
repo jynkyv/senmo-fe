@@ -1,10 +1,31 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Script from 'next/script';
 
+interface SiteConfig {
+  downloadLinks: {
+    binance: { android: string; ios: string; backup: string };
+    okx: { android: string; ios: string; backup: string };
+  };
+  contact: { qq: string; wechat: string; qqGroup: string };
+  appleAccount: { email: string; password: string };
+  inviteCode: string;
+  description: { appleInfo: string; inviteInfo: string };
+}
+
 export default function Home() {
+  const [config, setConfig] = useState<SiteConfig | null>(null);
+
+  useEffect(() => {
+    // 加载配置
+    fetch('/api/config')
+      .then(res => res.json())
+      .then(data => setConfig(data))
+      .catch(err => console.error('加载配置失败:', err));
+  }, []);
+
   useEffect(() => {
     // 复制到剪贴板功能
     (window as any).copyToClipboard = function(elementId: string, message: string) {
@@ -92,7 +113,7 @@ export default function Home() {
                   />
                   <div className="download-content">
                     <div className="download-title">币安(安卓)</div>
-                    <a href="https://www.maxweb.blue/zh-CN/join?ref=BTC1999" className="download-btn">下载</a>
+                    <a href={config?.downloadLinks.binance.android || 'https://www.maxweb.blue/zh-CN/join?ref=BTC1999'} className="download-btn">下载</a>
                   </div>
                 </div>
                 
@@ -108,7 +129,7 @@ export default function Home() {
                   />
                   <div className="download-content">
                     <div className="download-title">币安(iOS)</div>
-                    <a href="https://www.maxweb.blue/zh-CN/join?ref=BTC1999" className="download-btn">下载</a>
+                    <a href={config?.downloadLinks.binance.ios || 'https://www.maxweb.blue/zh-CN/join?ref=BTC1999'} className="download-btn">下载</a>
                   </div>
                 </div>
                 
@@ -124,7 +145,7 @@ export default function Home() {
                   />
                   <div className="download-content">
                     <div className="download-title">欧易(安卓)</div>
-                    <a href="https://www.lywebuuz.com/join/BTC1994" className="download-btn">下载</a>
+                    <a href={config?.downloadLinks.okx.android || 'https://www.lywebuuz.com/join/BTC1994'} className="download-btn">下载</a>
                   </div>
                 </div>
                 
@@ -140,7 +161,7 @@ export default function Home() {
                   />
                   <div className="download-content">
                     <div className="download-title">欧易(iOS)</div>
-                    <a href="https://www.lywebuuz.com/join/BTC1994" className="download-btn">下载</a>
+                    <a href={config?.downloadLinks.okx.ios || 'https://www.lywebuuz.com/join/BTC1994'} className="download-btn">下载</a>
                   </div>
                 </div>
               </div>
@@ -165,7 +186,7 @@ export default function Home() {
                       <div className="link-name">币安备用注册网站</div>
                       <div className="link-desc">备用下载渠道</div>
                     </div>
-                    <a href="https://www.maxweb.red/join?ref=BTC1999" className="link-btn">访问</a>
+                    <a href={config?.downloadLinks.binance.backup || 'https://www.maxweb.red/join?ref=BTC1999'} className="link-btn">访问</a>
                   </div>
                   
                   <div className="link-item">
@@ -181,7 +202,7 @@ export default function Home() {
                       <div className="link-name">欧易备用注册网站</div>
                       <div className="link-desc">备用下载渠道</div>
                     </div>
-                    <a href="https://www.lywebuuz.com/join/BTC1994" className="link-btn">访问</a>
+                    <a href={config?.downloadLinks.okx.backup || 'https://www.lywebuuz.com/join/BTC1994'} className="link-btn">访问</a>
                   </div>
                 </div>
               </div>
@@ -245,17 +266,11 @@ export default function Home() {
               </div>
 
               <div className="description" style={{ lineHeight: '1.8' }}>
-                <div style={{ textAlign: 'center', marginBottom: '15px' }}>
-                  苹果用户下载APP需要登录外网苹果ID<br />
-                  账号ezsrh21k@icloud.com<br />
-                  密码Qw112211<br />
-                  登录会需要填码&nbsp; &nbsp;找客服拿码就可以了
+                <div style={{ textAlign: 'center', marginBottom: '15px', whiteSpace: 'pre-line' }}>
+                  {config?.description.appleInfo || '苹果用户下载APP需要登录外网苹果ID\n账号ezsrh21k@icloud.com\n密码Qw112211\n登录会需要填码    找客服拿码就可以了'}
                 </div>
-                <div style={{ textAlign: 'center' }}>
-                  切记，玩币圈一定要填邀请码，<br />
-                  &nbsp; 币安只有注册的时候那一次机会!错过了没法重新填!<br />
-                  填我的邀请码后续每周一会反还你的交易手续费，<br />
-                  和每月币安精品周边赠送，我的推荐码，BTC1999<br />
+                <div style={{ textAlign: 'center', whiteSpace: 'pre-line' }}>
+                  {config?.description.inviteInfo || '切记，玩币圈一定要填邀请码，\n 币安只有注册的时候那一次机会!错过了没法重新填!\n填我的邀请码后续每周一会反还你的交易手续费，\n和每月币安精品周边赠送，我的推荐码，BTC1999'}
                 </div>
               </div>
 
@@ -271,7 +286,7 @@ export default function Home() {
                       <div className="contact-item">
                         <i className="fab fa-qq contact-icon"></i>
                         <div className="contact-label">QQ客服</div>
-                        <div className="contact-value" id="qqGroup">17314655</div>
+                        <div className="contact-value" id="qqGroup">{config?.contact.qq || '17314655'}</div>
                         <button 
                           className="contact-btn" 
                           onClick={() => (window as any).copyToClipboard('qqGroup', 'QQ号已复制')}
@@ -283,7 +298,7 @@ export default function Home() {
                       <div className="contact-item">
                         <i className="fab fa-weixin contact-icon"></i>
                         <div className="contact-label">客服微信</div>
-                        <div className="contact-value" id="wechatId">btc8178</div>
+                        <div className="contact-value" id="wechatId">{config?.contact.wechat || 'btc8178'}</div>
                         <button 
                           className="contact-btn" 
                           onClick={() => (window as any).copyToClipboard('wechatId', '微信号已复制')}
@@ -295,7 +310,7 @@ export default function Home() {
                       <div className="contact-item">
                         <i className="fab fa-qq contact-icon"></i>
                         <div className="contact-label">QQ交流群</div>
-                        <div className="contact-value" id="qqGroup1">1053880542</div>
+                        <div className="contact-value" id="qqGroup1">{config?.contact.qqGroup || '1053880542'}</div>
                         <button 
                           className="contact-btn" 
                           onClick={() => (window as any).copyToClipboard('qqGroup1', 'QQ群号已复制')}
@@ -311,7 +326,7 @@ export default function Home() {
                 <div className="footer">
                   <p>币安队长咚咚 © 2020-2025</p>
                   <p>提供安全可靠的官方下载渠道</p>
-                  <p>QQ：17314655 | 客服微信：btc8178</p>
+                  <p>QQ：{config?.contact.qq || '17314655'} | 客服微信：{config?.contact.wechat || 'btc8178'}</p>
                 </div>
               </main>
             </div>
