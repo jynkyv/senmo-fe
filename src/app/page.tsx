@@ -63,16 +63,6 @@ export default function Home() {
       }, 2000);
     };
 
-    // 下载卡片悬停效果
-    document.querySelectorAll('.download-card').forEach((card) => {
-      card.addEventListener('mouseenter', function(this: HTMLElement) {
-        this.style.transform = 'translateY(-5px)';
-      });
-
-      card.addEventListener('mouseleave', function(this: HTMLElement) {
-        this.style.transform = 'translateY(0)';
-      });
-    });
 
   }, []);
 
@@ -101,69 +91,85 @@ export default function Home() {
               </div>
 
               <div className="download-grid">
-                <div className="download-card">
+                <a 
+                  href={config?.downloadLinks.binance.android || 'https://www.maxweb.blue/zh-CN/join?ref=BTC1999'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <div className="download-badge">热门</div>
                   <Image 
                     src="/static/picture/5.jpg" 
                     alt="币安(安卓)" 
                     className="download-icon"
-                    width={100}
+                    width={60}
                     height={60}
                     unoptimized
                   />
                   <div className="download-content">
                     <div className="download-title">币安(安卓)</div>
-                    <a href={config?.downloadLinks.binance.android || 'https://www.maxweb.blue/zh-CN/join?ref=BTC1999'} className="download-btn">下载</a>
                   </div>
-                </div>
+                </a>
                 
-                <div className="download-card">
+                <a 
+                  href={config?.downloadLinks.binance.ios || 'https://www.maxweb.blue/zh-CN/join?ref=BTC1999'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <div className="download-badge">热门</div>
                   <Image 
                     src="/static/picture/6.jpg" 
                     alt="币安(iOS)" 
                     className="download-icon"
-                    width={100}
+                    width={60}
                     height={60}
                     unoptimized
                   />
                   <div className="download-content">
                     <div className="download-title">币安(iOS)</div>
-                    <a href={config?.downloadLinks.binance.ios || 'https://www.maxweb.blue/zh-CN/join?ref=BTC1999'} className="download-btn">下载</a>
                   </div>
-                </div>
+                </a>
                 
-                <div className="download-card">
+                <a 
+                  href={config?.downloadLinks.okx.android || 'https://www.lywebuuz.com/join/BTC1994'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <div className="download-badge">推荐</div>
                   <Image 
                     src="/static/picture/2.jpg" 
                     alt="欧易(安卓)" 
                     className="download-icon"
-                    width={100}
+                    width={60}
                     height={60}
                     unoptimized
                   />
                   <div className="download-content">
                     <div className="download-title">欧易(安卓)</div>
-                    <a href={config?.downloadLinks.okx.android || 'https://www.lywebuuz.com/join/BTC1994'} className="download-btn">下载</a>
                   </div>
-                </div>
+                </a>
                 
-                <div className="download-card">
+                <a 
+                  href={config?.downloadLinks.okx.ios || 'https://www.lywebuuz.com/join/BTC1994'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <div className="download-badge">推荐</div>
-        <Image
+                  <Image 
                     src="/static/picture/3.jpg" 
                     alt="欧易(iOS)" 
                     className="download-icon"
-          width={100}
+                    width={60}
                     height={60}
                     unoptimized
                   />
                   <div className="download-content">
                     <div className="download-title">欧易(iOS)</div>
-                    <a href={config?.downloadLinks.okx.ios || 'https://www.lywebuuz.com/join/BTC1994'} className="download-btn">下载</a>
                   </div>
-                </div>
+                </a>
               </div>
             
               {/* 其他下载链接 */}
@@ -173,37 +179,45 @@ export default function Home() {
                 </div>
 
                 <div className="link-list">
-                  <div className="link-item">
+                  <a 
+                    href={config?.downloadLinks.binance.backup || 'https://www.maxweb.red/join?ref=BTC1999'} 
+                    className="link-item"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Image 
                       src="/static/picture/7.jpg" 
                       alt="币安备用注册网站" 
                       className="link-icon"
-                      width={40}
-                      height={40}
+                      width={48}
+                      height={48}
                       unoptimized
                     />
                     <div className="link-text">
                       <div className="link-name">币安备用注册网站</div>
                       <div className="link-desc">备用下载渠道</div>
                     </div>
-                    <a href={config?.downloadLinks.binance.backup || 'https://www.maxweb.red/join?ref=BTC1999'} className="link-btn">访问</a>
-                  </div>
+                  </a>
                   
-                  <div className="link-item">
+                  <a 
+                    href={config?.downloadLinks.okx.backup || 'https://www.lywebuuz.com/join/BTC1994'} 
+                    className="link-item"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Image 
                       src="/static/picture/4.jpg" 
                       alt="欧易备用注册网站" 
                       className="link-icon"
-                      width={40}
-                      height={40}
+                      width={48}
+                      height={48}
                       unoptimized
                     />
                     <div className="link-text">
                       <div className="link-name">欧易备用注册网站</div>
                       <div className="link-desc">备用下载渠道</div>
                     </div>
-                    <a href={config?.downloadLinks.okx.backup || 'https://www.lywebuuz.com/join/BTC1994'} className="link-btn">访问</a>
-                  </div>
+                  </a>
                 </div>
               </div>
 
