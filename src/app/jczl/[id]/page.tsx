@@ -61,7 +61,7 @@ export default function JczlPage() {
         </div>
 
         <div className="article-content">
-          <span style={{ textWrapMode: 'wrap' }}>{data.content}</span>
+          <span style={{ whiteSpace: 'normal' }}>{data.content}</span>
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ interface SiteConfig {
     okx: { android: string; ios: string; backup: string };
   };
   contact: { qq: string; wechat: string; qqGroup: string };
+  appleAccount: { email: string; password: string };
   inviteCode: string;
   description: { appleInfo: string; inviteInfo: string };
 }
@@ -26,6 +27,19 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    // 显示通知
+    (window as any).showNotification = function(message: string) {
+      const notification = document.getElementById('notification');
+      if (!notification) return;
+      
+      notification.textContent = message;
+      notification.classList.add('show');
+
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 2000);
+    };
+
     // 复制到剪贴板功能
     (window as any).copyToClipboard = function(elementId: string, message: string) {
       const element = document.getElementById(elementId);
@@ -40,7 +54,7 @@ export default function Home() {
       try {
         const successful = document.execCommand('copy');
         if (successful) {
-          showNotification(message || '已复制到剪贴板');
+          (window as any).showNotification(message || '已复制到剪贴板');
         }
       } catch (err) {
         console.error('复制失败:', err);
@@ -48,20 +62,6 @@ export default function Home() {
 
       document.body.removeChild(textArea);
     };
-
-    // 显示通知
-    (window as any).showNotification = function(message: string) {
-      const notification = document.getElementById('notification');
-      if (!notification) return;
-      
-      notification.textContent = message;
-      notification.classList.add('show');
-
-      setTimeout(() => {
-        notification.classList.remove('show');
-      }, 2000);
-    };
-
 
   }, []);
 
