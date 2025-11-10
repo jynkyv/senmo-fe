@@ -10,7 +10,6 @@ interface SiteConfig {
     okx: { android: string; ios: string; backup: string };
   };
   contact: { qq: string; wechat: string; qqGroup: string };
-  appleAccount: { email: string; password: string };
   inviteCode: string;
   description: { appleInfo: string; inviteInfo: string };
 }

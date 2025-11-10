@@ -22,10 +22,6 @@ interface SiteConfig {
     wechat: string;
     qqGroup: string;
   };
-  appleAccount: {
-    email: string;
-    password: string;
-  };
   inviteCode: string;
   description: {
     appleInfo: string;
@@ -283,31 +279,6 @@ export default function AdminPage() {
                 value={config.contact.qqGroup}
                 onChange={(e) => updateConfig(['contact', 'qqGroup'], e.target.value)}
                 placeholder="QQ群号"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* 苹果账号 */}
-        <div className="admin-section">
-          <h2>🍎 苹果账号信息</h2>
-          <div className="admin-grid">
-            <div className="admin-form-group">
-              <label>邮箱</label>
-              <input
-                type="text"
-                value={config.appleAccount.email}
-                onChange={(e) => updateConfig(['appleAccount', 'email'], e.target.value)}
-                placeholder="example@icloud.com"
-              />
-            </div>
-            <div className="admin-form-group">
-              <label>密码</label>
-              <input
-                type="text"
-                value={config.appleAccount.password}
-                onChange={(e) => updateConfig(['appleAccount', 'password'], e.target.value)}
-                placeholder="密码"
               />
             </div>
           </div>
