@@ -85,15 +85,32 @@ function getConfigFromEnv(): SiteConfig | null {
   return null;
 }
 
-// 获取 Vercel KV 客户端（仅在需要时导入）
-async function getKVClient() {
+// 获取 Redis 客户端（仅在需要时导入）
+async function getRedisClient() {
   if (!isVercel) return null;
   
   try {
-    const { kv } = await import('@vercel/kv');
-    return kv;
+    const { createClient } = await import('redis');
+    
+    // Vercel KV 会提供 KV_URL 环境变量
+    const url = process.env.KV_URL || process.env.KV_REST_API_URL;
+    if (!url) {
+      console.warn('KV_URL 环境变量未设置');
+      return null;
+    }
+    
+    const client = createClient({
+      url: url
+    });
+    
+    // 连接 Redis
+    if (!client.isOpen) {
+      await client.connect();
+    }
+    
+    return client;
   } catch (error) {
-    console.error('无法初始化 Vercel KV:', error);
+    console.error('无法初始化 Redis 客户端:', error);
     return null;
   }
 }
@@ -123,16 +140,27 @@ export function getConfig(): SiteConfig {
 export async function getConfigAsync(): Promise<SiteConfig> {
   // 在 Vercel 环境中，尝试从 KV 读取
   if (isVercel) {
+    let redis = null;
     try {
-      const kv = await getKVClient();
-      if (kv) {
-        const kvConfig = await kv.get<SiteConfig>(CONFIG_KEY);
-        if (kvConfig) {
+      redis = await getRedisClient();
+      if (redis) {
+        const configStr = await redis.get(CONFIG_KEY);
+        if (configStr) {
+          const kvConfig = JSON.parse(configStr) as SiteConfig;
           return kvConfig;
         }
       }
     } catch (error) {
       console.error('从 KV 读取配置失败:', error);
+    } finally {
+      // 关闭连接
+      if (redis && redis.isOpen) {
+        try {
+          await redis.quit();
+        } catch (e) {
+          // 忽略关闭错误
+        }
+      }
     }
 
     // 如果 KV 不可用，尝试从环境变量读取
@@ -180,17 +208,28 @@ export function saveConfig(config: SiteConfig): void {
 export async function saveConfigAsync(config: SiteConfig): Promise<void> {
   // 在 Vercel 环境中，使用 KV 存储
   if (isVercel) {
+    let redis = null;
     try {
-      const kv = await getKVClient();
-      if (kv) {
-        await kv.set(CONFIG_KEY, config);
+      redis = await getRedisClient();
+      if (redis) {
+        // 将配置序列化为 JSON 字符串存储
+        await redis.set(CONFIG_KEY, JSON.stringify(config));
         return;
       } else {
-        throw new Error('Vercel KV 未配置。请在 Vercel 项目中启用 KV 存储。');
+        throw new Error('Vercel KV 未配置。请在 Vercel 项目中启用 KV 存储，并确保 KV_URL 环境变量已设置。');
       }
     } catch (error: any) {
       console.error('保存配置到 KV 失败:', error);
       throw new Error(`保存配置失败: ${error?.message || '未知错误'}`);
+    } finally {
+      // 关闭连接（如果需要）
+      if (redis && redis.isOpen) {
+        try {
+          await redis.quit();
+        } catch (e) {
+          // 忽略关闭错误
+        }
+      }
     }
   }
 

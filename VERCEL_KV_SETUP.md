@@ -24,9 +24,29 @@
 1. 创建 KV 数据库后，在 Storage 页面找到你的 KV 数据库
 2. 点击 **Connect** 或 **.env.local** 按钮
 3. 选择你的项目
-4. Vercel 会自动添加必要的环境变量到项目中
+4. Vercel 会自动添加 `KV_URL` 环境变量到项目中
 
-### 3. 初始化配置（可选）
+### 3. 在本地开发环境中设置（可选）
+
+如果你想在本地测试 KV 功能：
+
+```bash
+# 安装 Vercel CLI（如果还没有）
+npm i -g vercel
+
+# 登录 Vercel
+vercel login
+
+# 链接到项目
+vercel link
+
+# 拉取环境变量
+vercel env pull .env.development.local
+```
+
+这会在本地创建 `.env.development.local` 文件，包含 `KV_URL` 环境变量。
+
+### 4. 初始化配置（可选）
 
 如果你已经有配置文件 `config/site-config.json`，可以通过以下方式初始化 KV：
 
@@ -41,7 +61,7 @@ POST /api/config/init
 
 ```typescript
 // scripts/init-kv.ts
-import { kv } from '@vercel/kv';
+import { createClient } from 'redis';
 import fs from 'fs';
 import path from 'path';
 
@@ -49,8 +69,19 @@ const configPath = path.join(process.cwd(), 'config', 'site-config.json');
 
 async function initKV() {
   try {
+    // 从环境变量获取 KV_URL
+    const url = process.env.KV_URL || process.env.KV_REST_API_URL;
+    if (!url) {
+      throw new Error('KV_URL 环境变量未设置');
+    }
+    
+    const redis = createClient({ url });
+    await redis.connect();
+    
     const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-    await kv.set('site_config', config);
+    await redis.set('site_config', JSON.stringify(config));
+    
+    await redis.quit();
     console.log('配置已成功导入到 KV！');
   } catch (error) {
     console.error('导入失败:', error);
@@ -72,11 +103,11 @@ vercel login
 # 链接项目
 vercel link
 
-# 设置环境变量（如果需要）
-vercel env pull .env.local
+# 拉取环境变量
+vercel env pull .env.development.local
 ```
 
-### 4. 重新部署项目
+### 5. 重新部署项目
 
 完成上述步骤后，重新部署项目：
 
@@ -95,6 +126,14 @@ vercel env pull .env.local
 3. 尝试更新配置
 4. 如果成功，说明 KV 已正确配置
 
+## 技术说明
+
+项目使用 `redis` 包和 `createClient()` 来连接 Vercel KV：
+
+- 环境变量：`KV_URL` 或 `KV_REST_API_URL`（由 Vercel 自动设置）
+- 存储键名：`site_config`
+- 数据格式：JSON 字符串
+
 ## 故障排除
 
 ### 错误：Vercel KV 未配置
@@ -103,17 +142,27 @@ vercel env pull .env.local
 
 1. 检查 Vercel 项目设置中的 Storage 部分
 2. 确认 KV 数据库已创建并连接到项目
-3. 检查环境变量是否包含 `KV_URL` 和 `KV_REST_API_URL`
-4. 重新部署项目
+3. 检查环境变量是否包含 `KV_URL` 或 `KV_REST_API_URL`
+4. 在 Vercel 控制台的 Environment Variables 中确认 `KV_URL` 已设置
+5. 重新部署项目
 
 ### 配置读取失败
 
 如果配置读取失败，系统会按以下顺序尝试：
 
-1. 从 Vercel KV 读取
+1. 从 Vercel KV 读取（使用 `redis` 客户端）
 2. 从环境变量 `SITE_CONFIG` 读取（JSON 字符串格式）
 3. 从文件 `config/site-config.json` 读取（仅开发环境）
 4. 使用默认配置
+
+### Redis 连接问题
+
+如果遇到连接错误：
+
+1. 确认 `KV_URL` 环境变量格式正确（应该是 `redis://` 或 `rediss://` 开头的 URL）
+2. 检查网络连接和防火墙设置
+3. 确认 KV 数据库在正确的区域（region）
+4. 查看 Vercel 函数日志以获取详细错误信息
 
 ### 备用方案：使用环境变量
 
@@ -131,4 +180,7 @@ vercel env pull .env.local
 - 配置数据存储在 KV 中，不会因为重新部署而丢失
 - 在开发环境中，配置仍然存储在本地文件中
 - 生产环境（Vercel）使用 KV 存储，支持动态更新
+- 项目使用 `redis` npm 包，通过 `createClient()` 连接
+- 每次操作后会自动关闭 Redis 连接，避免连接泄漏
+- 确保已安装 `redis` 包：`npm install redis`
 
