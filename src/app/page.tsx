@@ -72,30 +72,6 @@ export default function Home() {
 
   }, []);
 
-  // 配置加载中，显示加载状态
-  if (loading || !config) {
-    return (
-      <div className="container">
-        <div className="first-screen">
-          <div className="compact-header" style={{ textAlign: 'center', padding: '50px 20px' }}>
-            <div className="avatar-container" style={{ margin: '0 auto 20px' }}>
-              <Image 
-                src="/static/picture/1.jpg" 
-                alt="币圈导航" 
-                className="avatar"
-                width={80}
-                height={80}
-                unoptimized
-              />
-            </div>
-            <h1 className="title">认准币圈导航官方正版软件 | 币安下载|欧易下载</h1>
-            <div style={{ marginTop: '30px', fontSize: '16px', color: '#666' }}>加载中...</div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="container">
         <div className="first-screen">
@@ -121,12 +97,13 @@ export default function Home() {
               </div>
 
               <div className="download-grid">
-                <a 
-                  href={config.downloadLinks.binance.android} 
-                  className="download-card"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                {config && (
+                  <a 
+                    href={config.downloadLinks.binance.android} 
+                    className="download-card"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                   <div className="download-badge">热门</div>
                   <Image 
                     src="/static/picture/5.jpg" 
@@ -140,13 +117,15 @@ export default function Home() {
                     <div className="download-title">币安(安卓)</div>
                   </div>
                 </a>
+                )}
                 
-                <a 
-                  href={config.downloadLinks.binance.ios} 
-                  className="download-card"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                {config && (
+                  <a 
+                    href={config.downloadLinks.binance.ios} 
+                    className="download-card"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                   <div className="download-badge">热门</div>
                   <Image 
                     src="/static/picture/6.jpg" 
@@ -160,13 +139,15 @@ export default function Home() {
                     <div className="download-title">币安(iOS)</div>
                   </div>
                 </a>
+                )}
                 
-                <a 
-                  href={config.downloadLinks.okx.android} 
-                  className="download-card"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                {config && (
+                  <a 
+                    href={config.downloadLinks.okx.android} 
+                    className="download-card"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                   <div className="download-badge">推荐</div>
                   <Image 
                     src="/static/picture/2.jpg" 
@@ -180,13 +161,15 @@ export default function Home() {
                     <div className="download-title">欧易(安卓)</div>
                   </div>
                 </a>
+                )}
                 
-                <a 
-                  href={config.downloadLinks.okx.ios} 
-                  className="download-card"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                {config && (
+                  <a 
+                    href={config.downloadLinks.okx.ios} 
+                    className="download-card"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                   <div className="download-badge">推荐</div>
                   <Image 
                     src="/static/picture/3.jpg" 
@@ -200,6 +183,7 @@ export default function Home() {
                     <div className="download-title">欧易(iOS)</div>
                   </div>
                 </a>
+                )}
               </div>
             
               {/* 其他下载链接 */}
@@ -209,12 +193,13 @@ export default function Home() {
                 </div>
 
                 <div className="link-list">
-                  <a 
-                    href={config.downloadLinks.binance.backup} 
-                    className="link-item"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  {config && (
+                    <a 
+                      href={config.downloadLinks.binance.backup} 
+                      className="link-item"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                     <Image 
                       src="/static/picture/7.jpg" 
                       alt="币安备用注册网站" 
@@ -228,13 +213,15 @@ export default function Home() {
                       <div className="link-desc">备用下载渠道</div>
                     </div>
                   </a>
+                  )}
                   
-                  <a 
-                    href={config.downloadLinks.okx.backup} 
-                    className="link-item"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  {config && (
+                    <a 
+                      href={config.downloadLinks.okx.backup} 
+                      className="link-item"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                     <Image 
                       src="/static/picture/4.jpg" 
                       alt="欧易备用注册网站" 
@@ -248,6 +235,7 @@ export default function Home() {
                       <div className="link-desc">备用下载渠道</div>
                     </div>
                   </a>
+                  )}
                 </div>
               </div>
 
@@ -309,14 +297,16 @@ export default function Home() {
                 </a>
               </div>
 
-              <div className="description" style={{ lineHeight: '1.8' }}>
-                <div style={{ textAlign: 'center', marginBottom: '15px', whiteSpace: 'pre-line' }}>
-                  {config.description.appleInfo}
+              {config && (
+                <div className="description" style={{ lineHeight: '1.8' }}>
+                  <div style={{ textAlign: 'center', marginBottom: '15px', whiteSpace: 'pre-line' }}>
+                    {config.description.appleInfo}
+                  </div>
+                  <div style={{ textAlign: 'center', whiteSpace: 'pre-line' }}>
+                    {config.description.inviteInfo}
+                  </div>
                 </div>
-                <div style={{ textAlign: 'center', whiteSpace: 'pre-line' }}>
-                  {config.description.inviteInfo}
-                </div>
-              </div>
+              )}
 
               <main>
                 <div className="links-container">
@@ -326,43 +316,45 @@ export default function Home() {
                       <i className="fas fa-headset"></i> 客服支持
                     </h3>
 
-                    <div className="contact-grid">
-                      <div className="contact-item">
-                        <i className="fab fa-qq contact-icon"></i>
-                        <div className="contact-label">QQ客服</div>
-                        <div className="contact-value" id="qqGroup">{config.contact.qq}</div>
-                        <button 
-                          className="contact-btn" 
-                          onClick={() => (window as any).copyToClipboard('qqGroup', 'QQ号已复制')}
-                        >
-                          复制
-                        </button>
-                      </div>
+                    {config && (
+                      <div className="contact-grid">
+                        <div className="contact-item">
+                          <i className="fab fa-qq contact-icon"></i>
+                          <div className="contact-label">QQ客服</div>
+                          <div className="contact-value" id="qqGroup">{config.contact.qq}</div>
+                          <button 
+                            className="contact-btn" 
+                            onClick={() => (window as any).copyToClipboard('qqGroup', 'QQ号已复制')}
+                          >
+                            复制
+                          </button>
+                        </div>
 
-                      <div className="contact-item">
-                        <i className="fab fa-weixin contact-icon"></i>
-                        <div className="contact-label">客服微信</div>
-                        <div className="contact-value" id="wechatId">{config.contact.wechat}</div>
-                        <button 
-                          className="contact-btn" 
-                          onClick={() => (window as any).copyToClipboard('wechatId', '微信号已复制')}
-                        >
-                          复制
-                        </button>
+                        <div className="contact-item">
+                          <i className="fab fa-weixin contact-icon"></i>
+                          <div className="contact-label">客服微信</div>
+                          <div className="contact-value" id="wechatId">{config.contact.wechat}</div>
+                          <button 
+                            className="contact-btn" 
+                            onClick={() => (window as any).copyToClipboard('wechatId', '微信号已复制')}
+                          >
+                            复制
+                          </button>
+                        </div>
+                        
+                        <div className="contact-item">
+                          <i className="fab fa-qq contact-icon"></i>
+                          <div className="contact-label">QQ交流群</div>
+                          <div className="contact-value" id="qqGroup1">{config.contact.qqGroup}</div>
+                          <button 
+                            className="contact-btn" 
+                            onClick={() => (window as any).copyToClipboard('qqGroup1', 'QQ群号已复制')}
+                          >
+                            复制
+                          </button>
+                        </div>
                       </div>
-                      
-                      <div className="contact-item">
-                        <i className="fab fa-qq contact-icon"></i>
-                        <div className="contact-label">QQ交流群</div>
-                        <div className="contact-value" id="qqGroup1">{config.contact.qqGroup}</div>
-                        <button 
-                          className="contact-btn" 
-                          onClick={() => (window as any).copyToClipboard('qqGroup1', 'QQ群号已复制')}
-                        >
-                          复制
-                        </button>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 
@@ -370,7 +362,9 @@ export default function Home() {
                 <div className="footer">
                   <p>币安队长咚咚 © 2020-2025</p>
                   <p>提供安全可靠的官方下载渠道</p>
-                  <p>QQ：{config.contact.qq} | 客服微信：{config.contact.wechat}</p>
+                  {config && (
+                    <p>QQ：{config.contact.qq} | 客服微信：{config.contact.wechat}</p>
+                  )}
                 </div>
               </main>
             </div>
