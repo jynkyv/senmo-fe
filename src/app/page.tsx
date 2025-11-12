@@ -97,13 +97,12 @@ export default function Home() {
               </div>
 
               <div className="download-grid">
-                {config && (
-                  <a 
-                    href={config.downloadLinks.binance.android} 
-                    className="download-card"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                <a 
+                  href={config?.downloadLinks.binance.android || '#'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <div className="download-badge">热门</div>
                   <Image 
                     src="/static/picture/5.jpg" 
@@ -117,15 +116,13 @@ export default function Home() {
                     <div className="download-title">币安(安卓)</div>
                   </div>
                 </a>
-                )}
                 
-                {config && (
-                  <a 
-                    href={config.downloadLinks.binance.ios} 
-                    className="download-card"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                <a 
+                  href={config?.downloadLinks.binance.ios || '#'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <div className="download-badge">热门</div>
                   <Image 
                     src="/static/picture/6.jpg" 
@@ -139,15 +136,13 @@ export default function Home() {
                     <div className="download-title">币安(iOS)</div>
                   </div>
                 </a>
-                )}
                 
-                {config && (
-                  <a 
-                    href={config.downloadLinks.okx.android} 
-                    className="download-card"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                <a 
+                  href={config?.downloadLinks.okx.android || '#'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <div className="download-badge">推荐</div>
                   <Image 
                     src="/static/picture/2.jpg" 
@@ -161,15 +156,13 @@ export default function Home() {
                     <div className="download-title">欧易(安卓)</div>
                   </div>
                 </a>
-                )}
                 
-                {config && (
-                  <a 
-                    href={config.downloadLinks.okx.ios} 
-                    className="download-card"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                <a 
+                  href={config?.downloadLinks.okx.ios || '#'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <div className="download-badge">推荐</div>
                   <Image 
                     src="/static/picture/3.jpg" 
@@ -183,7 +176,6 @@ export default function Home() {
                     <div className="download-title">欧易(iOS)</div>
                   </div>
                 </a>
-                )}
               </div>
             
               {/* 其他下载链接 */}
