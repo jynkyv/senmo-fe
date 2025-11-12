@@ -17,13 +17,20 @@ interface SiteConfig {
 
 export default function Home() {
   const [config, setConfig] = useState<SiteConfig | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // 加载配置
     fetch('/api/config')
       .then(res => res.json())
-      .then(data => setConfig(data))
-      .catch(err => console.error('加载配置失败:', err));
+      .then(data => {
+        setConfig(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('加载配置失败:', err);
+        setLoading(false);
+      });
   }, []);
 
   useEffect(() => {
@@ -65,6 +72,30 @@ export default function Home() {
 
   }, []);
 
+  // 配置加载中，显示加载状态
+  if (loading || !config) {
+    return (
+      <div className="container">
+        <div className="first-screen">
+          <div className="compact-header" style={{ textAlign: 'center', padding: '50px 20px' }}>
+            <div className="avatar-container" style={{ margin: '0 auto 20px' }}>
+              <Image 
+                src="/static/picture/1.jpg" 
+                alt="币圈导航" 
+                className="avatar"
+                width={80}
+                height={80}
+                unoptimized
+              />
+            </div>
+            <h1 className="title">认准币圈导航官方正版软件 | 币安下载|欧易下载</h1>
+            <div style={{ marginTop: '30px', fontSize: '16px', color: '#666' }}>加载中...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container">
         <div className="first-screen">
@@ -91,7 +122,7 @@ export default function Home() {
 
               <div className="download-grid">
                 <a 
-                  href={config?.downloadLinks.binance.android || 'https://www.maxweb.blue/zh-CN/join?ref=BTC1999'} 
+                  href={config.downloadLinks.binance.android} 
                   className="download-card"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -111,7 +142,7 @@ export default function Home() {
                 </a>
                 
                 <a 
-                  href={config?.downloadLinks.binance.ios || 'https://www.maxweb.blue/zh-CN/join?ref=BTC1999'} 
+                  href={config.downloadLinks.binance.ios} 
                   className="download-card"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -131,7 +162,7 @@ export default function Home() {
                 </a>
                 
                 <a 
-                  href={config?.downloadLinks.okx.android || 'https://www.lywebuuz.com/join/BTC1994'} 
+                  href={config.downloadLinks.okx.android} 
                   className="download-card"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -151,7 +182,7 @@ export default function Home() {
                 </a>
                 
                 <a 
-                  href={config?.downloadLinks.okx.ios || 'https://www.lywebuuz.com/join/BTC1994'} 
+                  href={config.downloadLinks.okx.ios} 
                   className="download-card"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -179,7 +210,7 @@ export default function Home() {
 
                 <div className="link-list">
                   <a 
-                    href={config?.downloadLinks.binance.backup || 'https://www.maxweb.red/join?ref=BTC1999'} 
+                    href={config.downloadLinks.binance.backup} 
                     className="link-item"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -199,7 +230,7 @@ export default function Home() {
                   </a>
                   
                   <a 
-                    href={config?.downloadLinks.okx.backup || 'https://www.lywebuuz.com/join/BTC1994'} 
+                    href={config.downloadLinks.okx.backup} 
                     className="link-item"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -280,10 +311,10 @@ export default function Home() {
 
               <div className="description" style={{ lineHeight: '1.8' }}>
                 <div style={{ textAlign: 'center', marginBottom: '15px', whiteSpace: 'pre-line' }}>
-                  {config?.description.appleInfo || '苹果用户下载APP需要登录外网苹果ID\n账号ezsrh21k@icloud.com\n密码Qw112211\n登录会需要填码    找客服拿码就可以了'}
+                  {config.description.appleInfo}
                 </div>
                 <div style={{ textAlign: 'center', whiteSpace: 'pre-line' }}>
-                  {config?.description.inviteInfo || '切记，玩币圈一定要填邀请码，\n 币安只有注册的时候那一次机会!错过了没法重新填!\n填我的邀请码后续每周一会反还你的交易手续费，\n和每月币安精品周边赠送，我的推荐码，BTC1999'}
+                  {config.description.inviteInfo}
                 </div>
               </div>
 
@@ -299,7 +330,7 @@ export default function Home() {
                       <div className="contact-item">
                         <i className="fab fa-qq contact-icon"></i>
                         <div className="contact-label">QQ客服</div>
-                        <div className="contact-value" id="qqGroup">{config?.contact.qq || '17314655'}</div>
+                        <div className="contact-value" id="qqGroup">{config.contact.qq}</div>
                         <button 
                           className="contact-btn" 
                           onClick={() => (window as any).copyToClipboard('qqGroup', 'QQ号已复制')}
@@ -311,7 +342,7 @@ export default function Home() {
                       <div className="contact-item">
                         <i className="fab fa-weixin contact-icon"></i>
                         <div className="contact-label">客服微信</div>
-                        <div className="contact-value" id="wechatId">{config?.contact.wechat || 'btc8178'}</div>
+                        <div className="contact-value" id="wechatId">{config.contact.wechat}</div>
                         <button 
                           className="contact-btn" 
                           onClick={() => (window as any).copyToClipboard('wechatId', '微信号已复制')}
@@ -323,7 +354,7 @@ export default function Home() {
                       <div className="contact-item">
                         <i className="fab fa-qq contact-icon"></i>
                         <div className="contact-label">QQ交流群</div>
-                        <div className="contact-value" id="qqGroup1">{config?.contact.qqGroup || '1053880542'}</div>
+                        <div className="contact-value" id="qqGroup1">{config.contact.qqGroup}</div>
                         <button 
                           className="contact-btn" 
                           onClick={() => (window as any).copyToClipboard('qqGroup1', 'QQ群号已复制')}
@@ -339,7 +370,7 @@ export default function Home() {
                 <div className="footer">
                   <p>币安队长咚咚 © 2020-2025</p>
                   <p>提供安全可靠的官方下载渠道</p>
-                  <p>QQ：{config?.contact.qq || '17314655'} | 客服微信：{config?.contact.wechat || 'btc8178'}</p>
+                  <p>QQ：{config.contact.qq} | 客服微信：{config.contact.wechat}</p>
                 </div>
               </main>
             </div>
