@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getConfig } from '@/lib/config';
+import { getConfigAsync } from '@/lib/config';
 import { cookies } from 'next/headers';
 
 export async function POST(request: NextRequest) {
   try {
     const { password } = await request.json();
-    const config = getConfig();
+    const config = await getConfigAsync();
     const adminPassword = config.admin?.password || 'admin123';
 
     if (password === adminPassword) {
