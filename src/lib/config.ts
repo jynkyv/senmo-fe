@@ -85,6 +85,48 @@ function getConfigFromEnv(): SiteConfig | null {
   return null;
 }
 
+// 检查 KV 配置状态
+export async function checkKVStatus(): Promise<{
+  available: boolean;
+  hasUrl: boolean;
+  error?: string;
+}> {
+  if (!isVercel) {
+    return { available: false, hasUrl: false, error: '非 Vercel 环境' };
+  }
+
+  const url = process.env.KV_URL || process.env.KV_REST_API_URL;
+  if (!url) {
+    return {
+      available: false,
+      hasUrl: false,
+      error: 'KV_URL 环境变量未设置。请在 Vercel 控制台中将 KV 数据库连接到项目。'
+    };
+  }
+
+  try {
+    const { createClient } = await import('redis');
+    const client = createClient({ url });
+    
+    if (!client.isOpen) {
+      await client.connect();
+    }
+    
+    // 测试连接
+    await client.ping();
+    
+    await client.quit();
+    
+    return { available: true, hasUrl: true };
+  } catch (error: any) {
+    return {
+      available: false,
+      hasUrl: true,
+      error: `连接失败: ${error?.message || '未知错误'}`
+    };
+  }
+}
+
 // 获取 Redis 客户端（仅在需要时导入）
 async function getRedisClient() {
   if (!isVercel) return null;

@@ -111,7 +111,13 @@ export default function AdminPage() {
       } else {
         let errorMsg = '保存失败：' + result.error;
         if (result.hint) {
-          errorMsg += '\n\n提示：' + result.hint;
+          errorMsg += '\n\n' + result.hint;
+        }
+        if (result.diagnosticUrl) {
+          errorMsg += '\n\n💡 提示：可以访问 ' + result.diagnosticUrl + ' 查看详细的 KV 配置状态';
+        }
+        if (result.kvStatus) {
+          errorMsg += '\n\nKV 状态：' + JSON.stringify(result.kvStatus, null, 2);
         }
         showMessage(errorMsg, 'error');
       }
@@ -119,6 +125,37 @@ export default function AdminPage() {
       showMessage('保存失败：' + (error as Error).message, 'error');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const checkKVStatus = async () => {
+    try {
+      const response = await fetch('/api/config/status');
+      const status = await response.json();
+      
+      if (status.error && !status.available) {
+        let msg = 'KV 配置检查：\n';
+        msg += '状态：' + (status.available ? '✅ 可用' : '❌ 不可用') + '\n';
+        msg += 'KV_URL：' + status.envVars?.KV_URL + '\n';
+        if (status.error) {
+          msg += '错误：' + status.error + '\n';
+        }
+        if (status.instructions) {
+          msg += '\n操作步骤：\n';
+          Object.values(status.instructions).forEach((step: any, index: number) => {
+            if (typeof step === 'string') {
+              msg += `${index + 1}. ${step}\n`;
+            }
+          });
+        }
+        showMessage(msg, 'error');
+      } else if (status.available) {
+        showMessage('✅ KV 配置正常，可以保存配置！', 'success');
+      } else {
+        showMessage('KV 状态：' + JSON.stringify(status, null, 2), 'error');
+      }
+    } catch (error) {
+      showMessage('检查 KV 状态失败：' + (error as Error).message, 'error');
     }
   };
 
@@ -340,6 +377,14 @@ export default function AdminPage() {
             style={{ minWidth: '120px' }}
           >
             {saving ? '保存中...' : '💾 保存配置'}
+          </button>
+          <button
+            onClick={checkKVStatus}
+            className="admin-btn"
+            style={{ minWidth: '120px', marginLeft: '10px' }}
+            title="检查 Vercel KV 配置状态"
+          >
+            🔍 检查 KV 状态
           </button>
         </div>
       </div>
