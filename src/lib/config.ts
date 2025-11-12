@@ -3,6 +3,8 @@ import path from 'path';
 
 const configPath = path.join(process.cwd(), 'config', 'site-config.json');
 const isVercel = process.env.VERCEL === '1';
+// 在本地开发时，如果设置了 KV_URL，也可以使用 KV
+const hasKVUrl = !!(process.env.KV_URL || process.env.KV_REST_API_URL);
 const CONFIG_KEY = 'site_config';
 
 export interface SiteConfig {
@@ -91,8 +93,9 @@ export async function checkKVStatus(): Promise<{
   hasUrl: boolean;
   error?: string;
 }> {
-  if (!isVercel) {
-    return { available: false, hasUrl: false, error: '非 Vercel 环境' };
+  // 在本地开发时，如果设置了 KV_URL，也可以使用 KV
+  if (!isVercel && !hasKVUrl) {
+    return { available: false, hasUrl: false, error: '非 Vercel 环境且未设置 KV_URL' };
   }
 
   const url = process.env.KV_URL || process.env.KV_REST_API_URL;
@@ -129,7 +132,8 @@ export async function checkKVStatus(): Promise<{
 
 // 获取 Redis 客户端（仅在需要时导入）
 async function getRedisClient() {
-  if (!isVercel) return null;
+  // 在 Vercel 环境或本地设置了 KV_URL 时，可以使用 KV
+  if (!isVercel && !hasKVUrl) return null;
   
   try {
     const { createClient } = await import('redis');
@@ -180,8 +184,8 @@ export function getConfig(): SiteConfig {
 
 // 异步读取配置（支持 KV）
 export async function getConfigAsync(): Promise<SiteConfig> {
-  // 在 Vercel 环境中，尝试从 KV 读取
-  if (isVercel) {
+  // 在 Vercel 环境或本地设置了 KV_URL 时，尝试从 KV 读取
+  if (isVercel || hasKVUrl) {
     let redis = null;
     try {
       redis = await getRedisClient();
@@ -248,8 +252,8 @@ export function saveConfig(config: SiteConfig): void {
 
 // 异步保存配置（支持 KV）
 export async function saveConfigAsync(config: SiteConfig): Promise<void> {
-  // 在 Vercel 环境中，使用 KV 存储
-  if (isVercel) {
+  // 在 Vercel 环境或本地设置了 KV_URL 时，使用 KV 存储
+  if (isVercel || hasKVUrl) {
     let redis = null;
     try {
       redis = await getRedisClient();

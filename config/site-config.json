@@ -1,10 +1,7 @@
 {
-  "admin": {
-    "password": "admin123"
-  },
   "downloadLinks": {
     "binance": {
-      "android": "https://www.maxweb.blue/zh-CN/join?ref=BTC1999",
+      "android": "https://www.maxweb.blue/zh-CN/join?ref=BTC19991",
       "ios": "https://www.maxweb.blue/zh-CN/join?ref=BTC1999",
       "backup": "https://www.maxweb.red/join?ref=BTC1999"
     },
@@ -15,9 +12,9 @@
     }
   },
   "contact": {
-    "qq": "17314655",
-    "wechat": "btc8178",
-    "qqGroup": "1053880542"
+    "qq": "117314655",
+    "wechat": "btc111",
+    "qqGroup": "10538805421"
   },
   "appleAccount": {
     "email": "ezsrh21k@icloud.com",
@@ -27,6 +24,8 @@
   "description": {
     "appleInfo": "苹果用户下载APP需要登录外网苹果ID\n账号ezsrh21k@icloud.com\n密码Qw112211\n登录会需要填码    找客服拿码就可以了",
     "inviteInfo": "切记，玩币圈一定要填邀请码，\n 币安只有注册的时候那一次机会!错过了没法重新填!\n填我的邀请码后续每周一会反还你的交易手续费，\n和每月币安精品周边赠送，我的推荐码，BTC1999"
+  },
+  "admin": {
+    "password": "admin123"
   }
 }
-
