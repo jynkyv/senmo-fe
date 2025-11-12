@@ -185,13 +185,12 @@ export default function Home() {
                 </div>
 
                 <div className="link-list">
-                  {config && (
-                    <a 
-                      href={config.downloadLinks.binance.backup} 
-                      className="link-item"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                  <a 
+                    href={config?.downloadLinks.binance.backup || '#'} 
+                    className="link-item"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Image 
                       src="/static/picture/7.jpg" 
                       alt="币安备用注册网站" 
@@ -205,15 +204,13 @@ export default function Home() {
                       <div className="link-desc">备用下载渠道</div>
                     </div>
                   </a>
-                  )}
                   
-                  {config && (
-                    <a 
-                      href={config.downloadLinks.okx.backup} 
-                      className="link-item"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                  <a 
+                    href={config?.downloadLinks.okx.backup || '#'} 
+                    className="link-item"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Image 
                       src="/static/picture/4.jpg" 
                       alt="欧易备用注册网站" 
@@ -227,7 +224,6 @@ export default function Home() {
                       <div className="link-desc">备用下载渠道</div>
                     </div>
                   </a>
-                  )}
                 </div>
               </div>
 
