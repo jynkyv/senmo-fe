@@ -109,7 +109,11 @@ export default function AdminPage() {
       if (result.success) {
         showMessage('配置保存成功！', 'success');
       } else {
-        showMessage('保存失败：' + result.error, 'error');
+        let errorMsg = '保存失败：' + result.error;
+        if (result.hint) {
+          errorMsg += '\n\n提示：' + result.hint;
+        }
+        showMessage(errorMsg, 'error');
       }
     } catch (error) {
       showMessage('保存失败：' + (error as Error).message, 'error');
