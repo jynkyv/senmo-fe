@@ -181,6 +181,46 @@ export default function Home() {
                 </a>
                 
                 <a 
+                  href={config?.downloadLinks?.bitget?.android || '#'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <div className="download-badge">推荐</div>
+                  <Image 
+                    src="/static/picture/10.png" 
+                    alt="Bitget(安卓)" 
+                    className="download-icon"
+                    width={48}
+                    height={48}
+                    unoptimized
+                  />
+                  <div className="download-content">
+                    <div className="download-title">Bitget(安卓)</div>
+                  </div>
+                </a>
+                
+                <a 
+                  href={config?.downloadLinks?.bitget?.ios || '#'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <div className="download-badge">推荐</div>
+                  <Image 
+                    src="/static/picture/10.png" 
+                    alt="Bitget(iOS)" 
+                    className="download-icon"
+                    width={48}
+                    height={48}
+                    unoptimized
+                  />
+                  <div className="download-content">
+                    <div className="download-title">Bitget(iOS)</div>
+                  </div>
+                </a>
+                
+                <a 
                   href={config?.downloadLinks?.bybit?.android || '#'} 
                   className="download-card"
                   target="_blank"
@@ -257,46 +297,6 @@ export default function Home() {
                   />
                   <div className="download-content">
                     <div className="download-title">Gate.io(iOS)</div>
-                  </div>
-                </a>
-                
-                <a 
-                  href={config?.downloadLinks?.bitget?.android || '#'} 
-                  className="download-card"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <div className="download-badge">推荐</div>
-                  <Image 
-                    src="/static/picture/10.png" 
-                    alt="Bitget(安卓)" 
-                    className="download-icon"
-                    width={48}
-                    height={48}
-                    unoptimized
-                  />
-                  <div className="download-content">
-                    <div className="download-title">Bitget(安卓)</div>
-                  </div>
-                </a>
-                
-                <a 
-                  href={config?.downloadLinks?.bitget?.ios || '#'} 
-                  className="download-card"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <div className="download-badge">推荐</div>
-                  <Image 
-                    src="/static/picture/10.png" 
-                    alt="Bitget(iOS)" 
-                    className="download-icon"
-                    width={48}
-                    height={48}
-                    unoptimized
-                  />
-                  <div className="download-content">
-                    <div className="download-title">Bitget(iOS)</div>
                   </div>
                 </a>
               </div>
