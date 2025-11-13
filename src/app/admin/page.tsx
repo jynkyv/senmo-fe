@@ -51,6 +51,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     checkAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkAuth = async () => {
@@ -64,7 +65,7 @@ export default function AdminPage() {
       } else {
         router.push('/admin/login');
       }
-    } catch (error) {
+    } catch {
       router.push('/admin/login');
     } finally {
       setCheckingAuth(false);
@@ -161,10 +162,11 @@ export default function AdminPage() {
     }
   };
 
-  const updateConfig = (path: string[], value: any) => {
+  const updateConfig = (path: string[], value: string) => {
     if (!config) return;
     
     const newConfig = { ...config };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let current: any = newConfig;
     
     for (let i = 0; i < path.length - 1; i++) {
@@ -173,7 +175,8 @@ export default function AdminPage() {
       if (current[key] === undefined || current[key] === null) {
         current[key] = {};
       }
-      current = current[key];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      current = current[key] as any;
     }
     
     current[path[path.length - 1]] = value;
