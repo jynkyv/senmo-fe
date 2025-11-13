@@ -186,6 +186,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
+                  <div className="download-badge">推荐</div>
                   <Image 
                     src="/static/picture/8.png" 
                     alt="Bybit(安卓)" 
@@ -205,6 +206,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
+                  <div className="download-badge">推荐</div>
                   <Image 
                     src="/static/picture/8.png" 
                     alt="Bybit(iOS)" 
@@ -224,6 +226,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
+                  <div className="download-badge">推荐</div>
                   <Image 
                     src="/static/picture/9.png" 
                     alt="Gate.io(安卓)" 
@@ -243,6 +246,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
+                  <div className="download-badge">推荐</div>
                   <Image 
                     src="/static/picture/9.png" 
                     alt="Gate.io(iOS)" 
@@ -262,6 +266,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
+                  <div className="download-badge">推荐</div>
                   <Image 
                     src="/static/picture/10.png" 
                     alt="Bitget(安卓)" 
@@ -281,6 +286,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
+                  <div className="download-badge">推荐</div>
                   <Image 
                     src="/static/picture/10.png" 
                     alt="Bitget(iOS)" 
