@@ -139,23 +139,37 @@
   box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3);
 }
 
-.admin-message {
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.5rem;
-  border-radius: 6px;
-  font-size: 0.875rem;
+/* 通知 */
+.admin-notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-size: 14px;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  max-width: 90%;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.admin-message-success {
-  background: #d1fae5;
-  color: #065f46;
-  border: 1px solid #a7f3d0;
+.admin-notification.show {
+  opacity: 1;
 }
 
-.admin-message-error {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
+.admin-notification-success {
+  background: rgba(16, 185, 129, 0.95);
+  color: white;
+}
+
+.admin-notification-error {
+  background: rgba(239, 68, 68, 0.95);
+  color: white;
 }
 
 .admin-loading {

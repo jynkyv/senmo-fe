@@ -8,6 +8,9 @@ interface SiteConfig {
   downloadLinks: {
     binance: { android: string; ios: string; backup: string };
     okx: { android: string; ios: string; backup: string };
+    bybit?: { android: string; ios: string };
+    gateio?: { android: string; ios: string };
+    bitget?: { android: string; ios: string };
   };
   contact: { qq: string; wechat: string; qqGroup: string };
   appleAccount: { email: string; password: string };
@@ -108,8 +111,8 @@ export default function Home() {
                     src="/static/picture/5.jpg" 
                     alt="币安(安卓)" 
                     className="download-icon"
-                    width={60}
-                    height={60}
+                    width={48}
+                    height={48}
                     unoptimized
                   />
                   <div className="download-content">
@@ -128,8 +131,8 @@ export default function Home() {
                     src="/static/picture/6.jpg" 
                     alt="币安(iOS)" 
                     className="download-icon"
-                    width={60}
-                    height={60}
+                    width={48}
+                    height={48}
                     unoptimized
                   />
                   <div className="download-content">
@@ -148,8 +151,8 @@ export default function Home() {
                     src="/static/picture/2.jpg" 
                     alt="欧易(安卓)" 
                     className="download-icon"
-                    width={60}
-                    height={60}
+                    width={48}
+                    height={48}
                     unoptimized
                   />
                   <div className="download-content">
@@ -168,12 +171,126 @@ export default function Home() {
                     src="/static/picture/3.jpg" 
                     alt="欧易(iOS)" 
                     className="download-icon"
-                    width={60}
-                    height={60}
+                    width={48}
+                    height={48}
                     unoptimized
                   />
                   <div className="download-content">
                     <div className="download-title">欧易(iOS)</div>
+                  </div>
+                </a>
+                
+                <a 
+                  href={config?.downloadLinks?.bybit?.android || '#'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image 
+                    src="/static/picture/8.png" 
+                    alt="Bybit(安卓)" 
+                    className="download-icon"
+                    width={48}
+                    height={48}
+                    unoptimized
+                  />
+                  <div className="download-content">
+                    <div className="download-title">Bybit(安卓)</div>
+                  </div>
+                </a>
+                
+                <a 
+                  href={config?.downloadLinks?.bybit?.ios || '#'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image 
+                    src="/static/picture/8.png" 
+                    alt="Bybit(iOS)" 
+                    className="download-icon"
+                    width={48}
+                    height={48}
+                    unoptimized
+                  />
+                  <div className="download-content">
+                    <div className="download-title">Bybit(iOS)</div>
+                  </div>
+                </a>
+                
+                <a 
+                  href={config?.downloadLinks?.gateio?.android || '#'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image 
+                    src="/static/picture/9.png" 
+                    alt="Gate.io(安卓)" 
+                    className="download-icon"
+                    width={48}
+                    height={48}
+                    unoptimized
+                  />
+                  <div className="download-content">
+                    <div className="download-title">Gate.io(安卓)</div>
+                  </div>
+                </a>
+                
+                <a 
+                  href={config?.downloadLinks?.gateio?.ios || '#'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image 
+                    src="/static/picture/9.png" 
+                    alt="Gate.io(iOS)" 
+                    className="download-icon"
+                    width={48}
+                    height={48}
+                    unoptimized
+                  />
+                  <div className="download-content">
+                    <div className="download-title">Gate.io(iOS)</div>
+                  </div>
+                </a>
+                
+                <a 
+                  href={config?.downloadLinks?.bitget?.android || '#'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image 
+                    src="/static/picture/10.png" 
+                    alt="Bitget(安卓)" 
+                    className="download-icon"
+                    width={48}
+                    height={48}
+                    unoptimized
+                  />
+                  <div className="download-content">
+                    <div className="download-title">Bitget(安卓)</div>
+                  </div>
+                </a>
+                
+                <a 
+                  href={config?.downloadLinks?.bitget?.ios || '#'} 
+                  className="download-card"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image 
+                    src="/static/picture/10.png" 
+                    alt="Bitget(iOS)" 
+                    className="download-icon"
+                    width={48}
+                    height={48}
+                    unoptimized
+                  />
+                  <div className="download-content">
+                    <div className="download-title">Bitget(iOS)</div>
                   </div>
                 </a>
               </div>
@@ -348,7 +465,7 @@ export default function Home() {
 
                 {/* 页脚 */}
                 <div className="footer">
-                  <p>币安队长咚咚 © 2020-2025</p>
+                  <p>币安队长 © 2019-2025</p>
                   <p>提供安全可靠的官方下载渠道</p>
                   {config && (
                     <p>QQ：{config.contact.qq} | 客服微信：{config.contact.wechat}</p>

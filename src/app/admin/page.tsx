@@ -16,6 +16,18 @@ interface SiteConfig {
       ios: string;
       backup: string;
     };
+    bybit?: {
+      android: string;
+      ios: string;
+    };
+    gateio?: {
+      android: string;
+      ios: string;
+    };
+    bitget?: {
+      android: string;
+      ios: string;
+    };
   };
   contact: {
     qq: string;
@@ -34,8 +46,6 @@ export default function AdminPage() {
   const [config, setConfig] = useState<SiteConfig | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState('');
-  const [messageType, setMessageType] = useState<'success' | 'error'>('success');
   const [authenticated, setAuthenticated] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
 
@@ -77,23 +87,31 @@ export default function AdminPage() {
       setConfig(data);
     } catch (error) {
       console.error('加载配置失败:', error);
-      showMessage('加载配置失败', 'error');
+      showNotification('加载配置失败', 'error');
     } finally {
       setLoading(false);
     }
   };
 
-  const showMessage = (msg: string, type: 'success' | 'error' = 'success') => {
-    setMessage(msg);
-    setMessageType(type);
-    setTimeout(() => setMessage(''), 3000);
+  // 显示通知
+  const showNotification = (message: string, type: 'success' | 'error' = 'success') => {
+    const notification = document.getElementById('admin-notification');
+    if (!notification) return;
+    
+    // 设置消息和类型
+    notification.textContent = message;
+    notification.className = `admin-notification admin-notification-${type}`;
+    notification.classList.add('show');
+
+    setTimeout(() => {
+      notification.classList.remove('show');
+    }, 3000);
   };
 
   const handleSave = async () => {
     if (!config) return;
     
     setSaving(true);
-    setMessage('');
     
     try {
       const response = await fetch('/api/config', {
@@ -107,22 +125,16 @@ export default function AdminPage() {
       const result = await response.json();
       
       if (result.success) {
-        showMessage('配置保存成功！', 'success');
+        showNotification('配置保存成功！', 'success');
       } else {
         let errorMsg = '保存失败：' + result.error;
         if (result.hint) {
-          errorMsg += '\n\n' + result.hint;
+          errorMsg += ' ' + result.hint;
         }
-        if (result.diagnosticUrl) {
-          errorMsg += '\n\n💡 提示：可以访问 ' + result.diagnosticUrl + ' 查看详细的 KV 配置状态';
-        }
-        if (result.kvStatus) {
-          errorMsg += '\n\nKV 状态：' + JSON.stringify(result.kvStatus, null, 2);
-        }
-        showMessage(errorMsg, 'error');
+        showNotification(errorMsg, 'error');
       }
     } catch (error) {
-      showMessage('保存失败：' + (error as Error).message, 'error');
+      showNotification('保存失败：' + (error as Error).message, 'error');
     } finally {
       setSaving(false);
     }
@@ -134,28 +146,18 @@ export default function AdminPage() {
       const status = await response.json();
       
       if (status.error && !status.available) {
-        let msg = 'KV 配置检查：\n';
-        msg += '状态：' + (status.available ? '✅ 可用' : '❌ 不可用') + '\n';
-        msg += 'KV_URL：' + status.envVars?.KV_URL + '\n';
+        let msg = 'KV 配置检查：状态：' + (status.available ? '✅ 可用' : '❌ 不可用');
         if (status.error) {
-          msg += '错误：' + status.error + '\n';
+          msg += ' ' + status.error;
         }
-        if (status.instructions) {
-          msg += '\n操作步骤：\n';
-          Object.values(status.instructions).forEach((step: any, index: number) => {
-            if (typeof step === 'string') {
-              msg += `${index + 1}. ${step}\n`;
-            }
-          });
-        }
-        showMessage(msg, 'error');
+        showNotification(msg, 'error');
       } else if (status.available) {
-        showMessage('✅ KV 配置正常，可以保存配置！', 'success');
+        showNotification('✅ KV 配置正常，可以保存配置！', 'success');
       } else {
-        showMessage('KV 状态：' + JSON.stringify(status, null, 2), 'error');
+        showNotification('KV 状态检查失败', 'error');
       }
     } catch (error) {
-      showMessage('检查 KV 状态失败：' + (error as Error).message, 'error');
+      showNotification('检查 KV 状态失败：' + (error as Error).message, 'error');
     }
   };
 
@@ -166,7 +168,12 @@ export default function AdminPage() {
     let current: any = newConfig;
     
     for (let i = 0; i < path.length - 1; i++) {
-      current = current[path[i]];
+      const key = path[i];
+      // 如果路径中的某个键不存在，创建它
+      if (current[key] === undefined || current[key] === null) {
+        current[key] = {};
+      }
+      current = current[key];
     }
     
     current[path[path.length - 1]] = value;
@@ -214,12 +221,6 @@ export default function AdminPage() {
       </div>
 
       <div className="admin-content">
-        {message && (
-          <div className={`admin-message admin-message-${messageType}`}>
-            {message}
-          </div>
-        )}
-
         {/* 下载链接 */}
         <div className="admin-section">
           <h2>📥 下载链接配置</h2>
@@ -284,6 +285,78 @@ export default function AdminPage() {
                   type="text"
                   value={config.downloadLinks.okx.backup}
                   onChange={(e) => updateConfig(['downloadLinks', 'okx', 'backup'], e.target.value)}
+                  placeholder="https://..."
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="admin-subsection" style={{ marginTop: '1.5rem' }}>
+            <h3>Bybit 下载链接</h3>
+            <div className="admin-grid">
+              <div className="admin-form-group">
+                <label>Android下载链接</label>
+                <input
+                  type="text"
+                  value={config.downloadLinks.bybit?.android || ''}
+                  onChange={(e) => updateConfig(['downloadLinks', 'bybit', 'android'], e.target.value)}
+                  placeholder="https://..."
+                />
+              </div>
+              <div className="admin-form-group">
+                <label>iOS下载链接</label>
+                <input
+                  type="text"
+                  value={config.downloadLinks.bybit?.ios || ''}
+                  onChange={(e) => updateConfig(['downloadLinks', 'bybit', 'ios'], e.target.value)}
+                  placeholder="https://..."
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="admin-subsection" style={{ marginTop: '1.5rem' }}>
+            <h3>Gate.io 下载链接</h3>
+            <div className="admin-grid">
+              <div className="admin-form-group">
+                <label>Android下载链接</label>
+                <input
+                  type="text"
+                  value={config.downloadLinks.gateio?.android || ''}
+                  onChange={(e) => updateConfig(['downloadLinks', 'gateio', 'android'], e.target.value)}
+                  placeholder="https://..."
+                />
+              </div>
+              <div className="admin-form-group">
+                <label>iOS下载链接</label>
+                <input
+                  type="text"
+                  value={config.downloadLinks.gateio?.ios || ''}
+                  onChange={(e) => updateConfig(['downloadLinks', 'gateio', 'ios'], e.target.value)}
+                  placeholder="https://..."
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="admin-subsection" style={{ marginTop: '1.5rem' }}>
+            <h3>Bitget 下载链接</h3>
+            <div className="admin-grid">
+              <div className="admin-form-group">
+                <label>Android下载链接</label>
+                <input
+                  type="text"
+                  value={config.downloadLinks.bitget?.android || ''}
+                  onChange={(e) => updateConfig(['downloadLinks', 'bitget', 'android'], e.target.value)}
+                  placeholder="https://..."
+                />
+              </div>
+              <div className="admin-form-group">
+                <label>iOS下载链接</label>
+                <input
+                  type="text"
+                  value={config.downloadLinks.bitget?.ios || ''}
+                  onChange={(e) => updateConfig(['downloadLinks', 'bitget', 'ios'], e.target.value)}
                   placeholder="https://..."
                 />
               </div>
@@ -388,6 +461,9 @@ export default function AdminPage() {
           </button>
         </div>
       </div>
+      
+      {/* 通知 */}
+      <div className="admin-notification" id="admin-notification"></div>
     </div>
   );
 }

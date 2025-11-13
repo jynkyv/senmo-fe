@@ -22,6 +22,18 @@ export interface SiteConfig {
       ios: string;
       backup: string;
     };
+    bybit: {
+      android: string;
+      ios: string;
+    };
+    gateio: {
+      android: string;
+      ios: string;
+    };
+    bitget: {
+      android: string;
+      ios: string;
+    };
   };
   contact: {
     qq: string;
@@ -55,6 +67,18 @@ function getDefaultConfig(): SiteConfig {
         android: '',
         ios: '',
         backup: ''
+      },
+      bybit: {
+        android: '',
+        ios: ''
+      },
+      gateio: {
+        android: '',
+        ios: ''
+      },
+      bitget: {
+        android: '',
+        ios: ''
       }
     },
     contact: {
